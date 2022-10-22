@@ -1,0 +1,48 @@
+.bgimage img{
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+}
+
+.title{
+    font-family: 'Courier New', Courier;
+    font-weight: bolder;
+    margin-left: 10px;
+    color: blueviolet;
+}
+
+.item{
+    position: relative;
+    display: inline-block;
+}
+
+.original{
+    text-decoration: line-through;
+    color: red;
+}
+
+.discount{
+    color: green;
+    font-weight: bold;
+}
+
+.shop-item{
+    width: 200px;
+    padding: 10px;
+    margin-left: 15px;
+}
+
+.scrollarea{
+    overflow: scroll;
+}
+
+.row-inner{
+    white-space: nowrap;
+    padding: 10px;
+}
+
+#toast-compra {
+    max-width: 100%;
+    background-color: rgb(62, 201, 62);
+}

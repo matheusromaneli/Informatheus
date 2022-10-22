@@ -1,0 +1,52 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang='pt'>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            Informatheus
+        {%endblock%}
+    </title>
+    <link rel='stylesheet' type='text/css' href="{% static 'css/all.css' %}">
+    <link rel='stylesheet' type='text/css' href="{% static 'css/bootstrap.css' %}">
+
+</head>
+
+<header>
+    <nav class="navbar navbar-light bg-light navbar-expand-md">
+        <div class="container">
+            <a class="navbar-brand nav-item active" href="index.html">Inicio</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu"
+                aria-expanded="false" aria-label="Botao de navegacao">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu">
+                <div class="navbar-nav mr-auto">       
+                    <a class="nav-link nav-item" href="{% url 'produto:index' %}">Explorar</a>
+                    <a class="nav-link nav-item" href="cadastro.html">Cadastro</a>
+                    <a class="nav-link nav-item" href="carrinho.html">
+                        <img src="{% static 'images/carrinho.svg' %}" alt="carrinho" style="width: 1.7rem;">
+                        <span id="car-items" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary" style="display: none">  
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<body>
+    <div class="container">
+        {% block body %}
+        404 Page Not Found
+        {% endblock %}    
+    </div>
+</body>
+<footer>
+    {% block footer %}
+        <hr>
+        Rodape Default
+    {% endblock %}
+</footer>
+</html>
