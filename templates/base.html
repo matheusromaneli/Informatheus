@@ -17,7 +17,7 @@
 <header>
     <nav class="navbar navbar-light bg-light navbar-expand-md">
         <div class="container">
-            <a class="navbar-brand nav-item active" href="index.html">Inicio</a>
+            <a class="navbar-brand nav-item active" href="{% url 'index' %}">Inicio</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu"
                 aria-expanded="false" aria-label="Botao de navegacao">
                 <span class="navbar-toggler-icon"></span>
@@ -25,8 +25,8 @@
             <div class="collapse navbar-collapse" id="menu">
                 <div class="navbar-nav mr-auto">       
                     <a class="nav-link nav-item" href="{% url 'produto:index' %}">Explorar</a>
-                    <a class="nav-link nav-item" href="cadastro.html">Cadastro</a>
-                    <a class="nav-link nav-item" href="carrinho.html">
+                    <a class="nav-link nav-item" href="{% url 'cadastro' %}">Cadastro</a>
+                    <a class="nav-link nav-item" href="{% url 'carrinho' %}">
                         <img src="{% static 'images/carrinho.svg' %}" alt="carrinho" style="width: 1.7rem;">
                         <span id="car-items" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary" style="display: none">  
                         </span>
@@ -36,10 +36,10 @@
         </div>
     </nav>
 </header>
-<body>
+<body class="barra">
     <div class="container">
         {% block body %}
-        404 Page Not Found
+            404 Page Not Found
         {% endblock %}    
     </div>
 </body>

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title%}
+    Carrinho
+{% endblock title%}
+
+{% block body %}
+    <div class="container row mx-auto mt-3" style="gap: 1rem;">
+        <div class="card col-lg-8">
+            <h1>Produtos</h1>
+            <ul class="list-group-flush ">
+                <div class="card mb-2">
+                    <div class="card-header d-flex justify-content-between">
+                        <h2>Mouse Razer</h2>
+                        <h2>R$ 532,12</h2>
+                    </div>
+                </div>
+                <div class="card my-2">
+                    <div class="card-header d-flex justify-content-between">
+                        <h2>Mouse Razer</h2>
+                        <h2>R$ 532,12</h2>
+                    </div>
+                </div>
+                <div class="card mb-2">
+                    <div class="card-header d-flex justify-content-between">
+                        <h2>Mouse Razer</h2>
+                        <h2>R$ 532,12</h2>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div class="card col-lg-3">
+            <h1>Resumo</h1>
+            <div class="d-flex justify-content-between">
+                <p class="text-secondary font-size-6 ml-2">Valor dos produtos:</p>
+                <p class="font-weight-bolder">R$ 1.596,36</p>
+            </div>
+            <div class="bg-secondary" style="height: 1px;"></div>
+            <div class="d-flex justify-content-between">
+                <p class="text-secondary font-size-6 ml-2">Frete:</p>
+                <p class="font-weight-bolder">R$ 22,36</p>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p class="text-secondary font-size-6 ml-2">Total:</p>
+                <p class="font-weight-bolder">R$ 1.618,36</p>
+            </div>
+            <button class="p-2 rounded mb-2 bg-secondary text-light">Ir para pagamento</button>
+            <div class="p-2 rounded mb-2 bg-primary text-center">
+                <a class="text-decoration-none text-light" href="{% url 'produto:index' %}">
+                    Continuar comprando
+                </a> 
+            </div>
+        </div>
+    </div>
+{% endblock body %}
