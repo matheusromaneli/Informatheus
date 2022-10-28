@@ -2,19 +2,23 @@
 {% load static%}
 
 {% block body %}
-
+<h5 class="my-3">Lista de cards Bootstrap</h5>
 <div class="card-deck m-2">
+
+    {% for card in cards %}
     <div class="col-lg-4 col-md-6">
         <div class="card m-3">
             <div class="card-body">
                 <div class="text-center">
-                    <h4 class="card-title">Card</h4>
-                    <p class="text-warning font-weight-bold">Carrinho/Explorar</p>
+                    <h4 class="card-title">{{card.title}}</h4>
+                    <p class="text-warning font-weight-bold">{{card.pages_used}}</p>
                 </div>
-                <p class="card-text text-center">Esse item serve para fazer estilos dos itens a se comprar</p>
+                <p class="card-text text-center">{{card.short_description}}</p>
             </div>
         </div>
     </div>
+    {% endfor %}
+    
 </div>
 
 {% endblock body %}

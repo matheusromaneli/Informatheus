@@ -7,13 +7,17 @@ class Produto(models.Model):
     imagem = models.CharField(max_length=70, blank=True)
     valor = models.DecimalField(max_digits=6,decimal_places=2)
     desconto = models.IntegerField(validators=[
-            MaxValueValidator(100),
-            MinValueValidator(0)
-        ])
+        MaxValueValidator(100),
+        MinValueValidator(0)
+    ])
+
     class Meta:
         db_table = 'produto'
         ordering = ('nome',)
 
     def __str__(self):
         return self.nome
+
+    def valorComDesconto(self):
+        return self.valor * (1-self.desconto/100)
     
