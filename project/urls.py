@@ -21,7 +21,7 @@ from project import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('produto/', include('produto.urls')),
-    path('', views.index, name="index"),
+    path('', include('cards.urls')),
     path('cadastro/', views.cadastro, name="cadastro"),
     path('carrinho/', views.carrinho, name="carrinho")
 ]
