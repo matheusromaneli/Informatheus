@@ -11,6 +11,10 @@ class Produto(models.Model):
         MinValueValidator(0)
     ])
 
+    def valorComDesconto(self):
+        com_desconto = (1-self.desconto/100) * self.valor.__float__()
+        return f'{com_desconto: .2f}'
+
     class Meta:
         db_table = 'produto'
         ordering = ('nome',)
@@ -18,6 +22,4 @@ class Produto(models.Model):
     def __str__(self):
         return self.nome
 
-    def valorComDesconto(self):
-        return self.valor * (1-self.desconto/100)
     

@@ -37,12 +37,17 @@
         </div>
     </nav>
 </header>
+
 <body class="barra">
     <div class="container">
         {% block body %}
             404 Page Not Found
         {% endblock %}    
     </div>
+    <script src={% static 'js/jquery-3.3.1.js' %}></script>
+    <script src={% static 'js/popper.js' %}></script>
+    <script src={% static 'js/bootstrap.js' %}></script>
+    <script src={% static 'js/script.js' %}></script>
 </body>
 <footer>
     {% block footer %}
