@@ -6,111 +6,109 @@
 {% endblock title %}
 
 {% block body %}
-    <div id="mouses">
-        <h1 class="title">Produtos</h1>
-        <table>
-            <tbody>
-                {% for produto, form in listas %}
-                    <div class="item">
-                        <div class="card shop-item">
-                            <div class="d-flex justify-content-between">
-                                <p class="font-weight-bold text-danger text-justify">{{produto.desconto}}%</p>
-                                <div id="likedislike">
-                                    <a id="{{produto.id}}btnlike" class="btnlike">
-                                        <i class="far fa-thumbs-up"></i>
-                                        <span id="{{produto.id}}like">1</span>        
-                                    </a>
-                                    <a id="{{produto.id}}btndislike" class="btndislike">
-                                        <i class="far fa-thumbs-down"></i>
-                                        <span id="{{produto.id}}dislike">0</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div id="midlevel">
-                                <div class="bgimage">
-                                    <img src={% static 'images/' %}{{produto.imagem}} alt={{produto.slug}}>
-                                </div>
-                            </div>
-                            <div class="p-3" id="bottomlevel">
-                                <span data-toggle="tooltip" title={{produto.nome}}>
-                                    <p class="mb-0 font-weight-bold overflow-hidden">{{produto.nome}}</p>
-                                </span>
-                                <p class="mb-0 original"> {{produto.valor}}</p>
-                                <p class="mb-0 discount"> {{produto.valorComDesconto}}</p>
-                            </div>
-                            <div class="card-footer">
-                                <form class="form-inline" 
-                                style="{% if form.quantidade.value == 0 %} display:none {% endif %}" 
-                                method="POST" novalidate
-                                action="{% url 'carrinho:atualiza_carrinho'%}"> 
-                                    {% csrf_token %}
-                                    {{ form.produto_id }}
-                                    <div class="input-group w-100" style="{% if form.quantidade.value == 0 %} display:none {% endif %}">
-                                        <div class="input-group-prepend">
-                                            <input type="button" class="btn btn-secondary menos" value="-">
-                                        </div>
-                                        {{ form.quantidade }}
-                                        <div class="input-group-append">
-                                            <input type="button" class="btn btn-secondary mais" value="+">
-                                        </div>
-                                    </div>    
-                                </form>
-                                <input type="button" 
-                                       class="btn btn-primary comprar w-100"
-                                       style="{% if form.quantidade.value > 0 %} display:none {% endif %}"
-                                       value="Comprar">
+    <h1 class="title">Produtos</h1>
+    <div class="d-flex flex-column-reverse flex-md-column">
+        <div class="d-flex flex-column flex-md-row justify-content-center mb-3 ">
+            {% for produto, form in listas %}
+                <div class="item mb-3 d-flex justify-content-center">
+                    <div class="card shop-item">
+                        <div class="d-flex justify-content-between">
+                            <p class="font-weight-bold text-danger text-justify">{{produto.desconto}}%</p>
+                            <div id="likedislike">
+                                <a id="{{produto.id}}btnlike" class="btnlike">
+                                    <i class="far fa-thumbs-up"></i>
+                                    <span id="{{produto.id}}like">1</span>        
+                                </a>
+                                <a id="{{produto.id}}btndislike" class="btndislike">
+                                    <i class="far fa-thumbs-down"></i>
+                                    <span id="{{produto.id}}dislike">0</span>
+                                </a>
                             </div>
                         </div>
+                        <div id="midlevel">
+                            <div class="bgimage">
+                                <img src={% static 'images/' %}{{produto.imagem}} alt={{produto.slug}}>
+                            </div>
+                        </div>
+                        <div class="p-3" id="bottomlevel">
+                            <span data-toggle="tooltip" title={{produto.nome}}>
+                                <p class="mb-0 font-weight-bold overflow-hidden">{{produto.nome}}</p>
+                            </span>
+                            <p class="mb-0 original"> {{produto.valor}}</p>
+                            <p class="mb-0 discount"> {{produto.valorComDesconto}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <form class="form-inline" 
+                            style="{% if form.quantidade.value == 0 %} display:none {% endif %}" 
+                            method="POST" novalidate
+                            action="{% url 'carrinho:atualiza_carrinho'%}"> 
+                                {% csrf_token %}
+                                {{ form.produto_id }}
+                                <div class="input-group w-100" style="{% if form.quantidade.value == 0 %} display:none {% endif %}">
+                                    <div class="input-group-prepend">
+                                        <input type="button" class="btn btn-secondary menos" value="-">
+                                    </div>
+                                    {{ form.quantidade }}
+                                    <div class="input-group-append">
+                                        <input type="button" class="btn btn-secondary mais" value="+">
+                                    </div>
+                                </div>    
+                            </form>
+                            <input type="button" 
+                                    class="btn btn-primary comprar w-100"
+                                    style="{% if form.quantidade.value > 0 %} display:none {% endif %}"
+                                    value="Comprar">
+                        </div>
                     </div>
-                {% endfor %}    
-            </tbody>
-        </table>
-    </div>
-    <div style="font-size: 14px; margin-bottom:28px">
-        {% if produtos.has_other_pages %}
-            <ul class="pagination">
-                {% if produtos.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?pagina={{produtos.previous_page_number}}">
-                            Anterior
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">
-                            Anterior
-                        </a>
-                    </li>
-                {% endif %}
-                {% for i in produtos.paginator.page_range %}
-                    {% if produtos.number == i %}
-                        <li class="page-item active">
-                            <a class="page-link" href="#">
-                                {{i}}
+                </div>
+            {% endfor %}    
+        </div>
+        <div style="font-size: 14px; margin-bottom:28px">
+            {% if produtos.has_other_pages %}
+                <ul class="pagination justify-content-center">
+                    {% if produtos.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?pagina={{produtos.previous_page_number}}">
+                                Anterior
                             </a>
                         </li>
                     {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="?pagina={{i}}">
-                                {{i}}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                Anterior
                             </a>
                         </li>
                     {% endif %}
-                {% endfor %}
-                {% if produtos.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?pagina={{produtos.next_page_number}}">
-                            Próxima
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">
-                            Próxima
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        {% endif %}
+                    {% for i in produtos.paginator.page_range %}
+                        {% if produtos.number == i %}
+                            <li class="page-item active">
+                                <a class="page-link" href="#">
+                                    {{i}}
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?pagina={{i}}">
+                                    {{i}}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if produtos.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?pagina={{produtos.next_page_number}}">
+                                Próxima
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                Próxima
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
     </div>
 {% endblock body %}

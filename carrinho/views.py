@@ -17,8 +17,8 @@ def index(request):
         "has_product": len(produtos_carrinho) > 0, 
         "produtos": produtos_carrinho, 
         "total": valor_carrinho, 
-        "frete": "%.2f" % float(valor_carrinho * Decimal(0.2)), 
-        "total_frete": "%.2f" % float(valor_carrinho * Decimal(1.2))
+        "frete": "%.2f" % float(valor_carrinho * Decimal(0.02)), 
+        "total_frete": "%.2f" % float(valor_carrinho * Decimal(1.02))
     })
 
 def atualiza_carrinho(request):

@@ -7,7 +7,7 @@ from produto.models import Produto
 
 def index(request):
     produtos = Produto.objects.all()
-    paginator = Paginator(produtos, 5)
+    paginator = Paginator(produtos, 3)
     pagina = request.GET.get('pagina')
     page_obj = paginator.get_page(pagina)
 
@@ -18,7 +18,7 @@ def index(request):
         form = QuantidadeForm(initial={'quantidade': qtd, 'produto_id': produto.id})
         lista_de_forms.append(form)
 
-    paginator_forms = Paginator(lista_de_forms, 5)
+    paginator_forms = Paginator(lista_de_forms, 3)
     forms_obj = paginator_forms.get_page(pagina)
 
     return render(request, 'produto/index.html', {"listas": zip(page_obj, forms_obj), "produtos": page_obj})
