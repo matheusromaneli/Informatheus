@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -6,7 +7,19 @@ from carrinho.forms import QuantidadeForm
 
 # Create your views here.
 def index(request):
-    return render(request, 'carrinho/index.html')
+    carrinho = Carrinho(request)
+
+    produtos_carrinho = carrinho.get_produtos()
+
+    valor_carrinho = carrinho.get_preco_carrinho()
+
+    return render(request, 'carrinho/index.html', {
+        "has_product": len(produtos_carrinho) > 0, 
+        "produtos": produtos_carrinho, 
+        "total": valor_carrinho, 
+        "frete": "%.2f" % float(valor_carrinho * Decimal(0.2)), 
+        "total_frete": "%.2f" % float(valor_carrinho * Decimal(1.2))
+    })
 
 def atualiza_carrinho(request):
     form = QuantidadeForm(request.POST)
@@ -24,8 +37,6 @@ def atualiza_carrinho(request):
 
         qtd = carrinho.get_quantidade_carrinho()
         preco_carrinho = carrinho.get_preco_carrinho()
-
-        print('Chamou atualiza carrinho')
 
         return HttpResponse('Ok')
     else:

@@ -62,7 +62,6 @@
                     input.find("input[name='quantidade']").val(1);
                     let url = form.attr('action');
                     let formData = form.serializeArray();
-                    console.log(formData)
                     $.post(url, formData, function(response){
                         $(botao_comprar).fadeTo('fast', 0.3, function(){
                             $(botao_comprar).hide();
@@ -70,6 +69,47 @@
                         });
                     });
                 });
+
+                $(".mais").click(function() {
+                    this.blur();
+                    var input = $(this).parent().prev();
+                    var num = +input.val() + 1
+                    if ( num < 100){
+                        input.val(num);
+                        let form = $(this).parent().parent().prev().prev().prev();
+                        let url = form.attr('action');
+                        let formData = form.serializeArray();
+                        $.post(url, formData, function(response){
+                            console.log('+ clicked');
+                        });
+                    }
+                    else{
+                        return;
+                    }
+                });
+
+                $(".menos").click(function() {
+                    this.blur();
+                    let infos = $(this).parent().parent();
+                    var input = $(this).parent().next();
+                    console.log(input);
+                    var num = +input.val() - 1;
+                    if(num < 0){
+                        num = 0;
+                    }
+                    input.val(num);
+                    let form = $(this).parent().parent().prev().prev().prev();
+                    let botao_comprar = $(this).parent().parent().next();
+                    let url = form.attr('action');
+                    let formData = form.serializeArray();
+                    $.post(url, formData, function(response){
+                        if( num == 0 ){
+                            $(infos).hide();
+                            $(botao_comprar).fadeTo('fast', 1);
+                        }
+                    });
+                });
+
             {% endblock %}
         });
     </script>
@@ -77,7 +117,10 @@
 <footer>
     {% block footer %}
         <hr>
-        Rodape Default
+            <div class="d-flex flex-column align-self-center font-weight-bold mb-4 ml-5 mr-5">
+                <item class="p-2">Ciencia da Computação - UFF</item>
+                <item class="p-2"> Niterói - RJ </item>
+            </div>
     {% endblock %}
 </footer>
 </html>

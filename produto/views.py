@@ -11,9 +11,6 @@ def index(request):
     pagina = request.GET.get('pagina')
     page_obj = paginator.get_page(pagina)
 
-    print (produtos)
-    print(pagina)
-
     carrinho = Carrinho(request)
     lista_de_forms = []
     for produto in produtos:
@@ -21,4 +18,7 @@ def index(request):
         form = QuantidadeForm(initial={'quantidade': qtd, 'produto_id': produto.id})
         lista_de_forms.append(form)
 
-    return render(request, 'produto/index.html', {"listas": zip(page_obj, lista_de_forms), "produtos": page_obj})
+    paginator_forms = Paginator(lista_de_forms, 5)
+    forms_obj = paginator_forms.get_page(pagina)
+
+    return render(request, 'produto/index.html', {"listas": zip(page_obj, forms_obj), "produtos": page_obj})

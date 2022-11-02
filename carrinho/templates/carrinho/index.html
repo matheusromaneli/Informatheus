@@ -6,43 +6,40 @@
 
 {% block body %}
     <div class="container row mx-auto mt-3" style="gap: 1rem;">
-        <div class="card col-lg-8">
-            <h1>Produtos</h1>
-            <ul class="list-group-flush ">
-                <div class="card mb-2">
-                    <div class="card-header d-flex justify-content-between">
-                        <h2>Mouse Razer</h2>
-                        <h2>R$ 532,12</h2>
-                    </div>
-                </div>
-                <div class="card my-2">
-                    <div class="card-header d-flex justify-content-between">
-                        <h2>Mouse Razer</h2>
-                        <h2>R$ 532,12</h2>
-                    </div>
-                </div>
-                <div class="card mb-2">
-                    <div class="card-header d-flex justify-content-between">
-                        <h2>Mouse Razer</h2>
-                        <h2>R$ 532,12</h2>
-                    </div>
-                </div>
-            </ul>
-        </div>
+        {% if has_product %}
+            <div class="card col-lg-8">
+                <h1>Produtos</h1>
+                <ul class="list-group-flush ">
+                    {% for produto in produtos %}
+                        <div class="card mb-2">
+                            <div class="card-header d-flex justify-content-between">
+                                <h2>{{produto.produto.nome}}</h2>
+                                <h2>{{produto.quantidade}}</h2>
+                                <h2>R$ {{produto.preco_total}}</h2>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <h1 class="large">Você ainda não possui itens no carrinho</h1>
+        {% endif %}
+        
+        {% if total != 0 %}
         <div class="card col-lg-3">
             <h1>Resumo</h1>
             <div class="d-flex justify-content-between">
                 <p class="text-secondary font-size-6 ml-2">Valor dos produtos:</p>
-                <p class="font-weight-bolder">R$ 1.596,36</p>
+                <p class="font-weight-bolder">R$ {{total}}</p>
             </div>
             <div class="bg-secondary" style="height: 1px;"></div>
             <div class="d-flex justify-content-between">
                 <p class="text-secondary font-size-6 ml-2">Frete:</p>
-                <p class="font-weight-bolder">R$ 22,36</p>
+                <p class="font-weight-bolder">R$ {{frete}}</p>
             </div>
             <div class="d-flex justify-content-between">
                 <p class="text-secondary font-size-6 ml-2">Total:</p>
-                <p class="font-weight-bolder">R$ 1.618,36</p>
+                <p class="font-weight-bolder">R$ {{total}}</p>
             </div>
             <button class="p-2 rounded mb-2 bg-secondary text-light">Ir para pagamento</button>
             <div class="p-2 rounded mb-2 bg-primary text-center">
@@ -51,5 +48,6 @@
                 </a> 
             </div>
         </div>
+        {% endif %}   
     </div>
 {% endblock body %}

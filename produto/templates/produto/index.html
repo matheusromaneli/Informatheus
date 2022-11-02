@@ -39,7 +39,10 @@
                                 <p class="mb-0 discount"> {{produto.valorComDesconto}}</p>
                             </div>
                             <div class="card-footer">
-                                <form class="form-inline" style="{% if form.quantidade.value == 0 %} display:none {% endif %}" method="POST" action="{% url 'carrinho:atualiza_carrinho'%}"> 
+                                <form class="form-inline" 
+                                style="{% if form.quantidade.value == 0 %} display:none {% endif %}" 
+                                method="POST" novalidate
+                                action="{% url 'carrinho:atualiza_carrinho'%}"> 
                                     {% csrf_token %}
                                     {{ form.produto_id }}
                                     <div class="input-group w-100" style="{% if form.quantidade.value == 0 %} display:none {% endif %}">
