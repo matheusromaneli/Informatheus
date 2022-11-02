@@ -48,6 +48,31 @@
     <script src={% static 'js/popper.js' %}></script>
     <script src={% static 'js/bootstrap.js' %}></script>
     <script src={% static 'js/script.js' %}></script>
+    <script>
+        $(document).ready(function(){
+            
+            {% block domready %}
+                $('.comprar').click(function(){
+                    this.blur();
+                    let botao_comprar = this;
+                    let input = $(botao_comprar).prev();
+                    let prodid = $(input).prev();
+                    let csrf = $(prodid).prev();
+                    let form = $(csrf).prev();
+                    input.find("input[name='quantidade']").val(1);
+                    let url = form.attr('action');
+                    let formData = form.serializeArray();
+                    console.log(formData)
+                    $.post(url, formData, function(response){
+                        $(botao_comprar).fadeTo('fast', 0.3, function(){
+                            $(botao_comprar).hide();
+                            input.show();
+                        });
+                    });
+                });
+            {% endblock %}
+        });
+    </script>
 </body>
 <footer>
     {% block footer %}

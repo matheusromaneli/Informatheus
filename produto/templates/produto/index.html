@@ -6,57 +6,62 @@
 {% endblock title %}
 
 {% block body %}
-    <div id="toast-compra" class="toast align-items-center fixed-bottom m-3" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
-        <div class="d-flex justify-content-between">
-            <div class="toast-body">
-                Item adicionado ao carrinho.
-            </div>
-            <button type="button" class="btn-close ml-auto my-auto mr-2 p-0" data-bs-dismiss="toast" aria-label="Close">
-                <img src="./assets/images/close-btn.png" alt="..." style="width: 1.2rem; background-color: rgb(62, 201, 62);">
-            </button>
-        </div>
-    </div>
     <div id="mouses">
         <h1 class="title">Produtos</h1>
         <table>
             <tbody>
-                {% for produto in produtos %}
-                <div class="item">
-                    <div class="card shop-item">
-                        <div class="d-flex justify-content-between">
-                            <p class="font-weight-bold text-danger text-justify">{{produto.desconto}}%</p>
-                            <div id="likedislike">
-                                <a id="{{produto.id}}btnlike" class="btnlike">
-                                    <i class="far fa-thumbs-up"></i>
-                                    <span id="{{produto.id}}like">1</span>        
-                                </a>
-                                <a id="{{produto.id}}btndislike" class="btndislike">
-                                    <i class="far fa-thumbs-down"></i>
-                                    <span id="{{produto.id}}dislike">0</span>
-                                </a>
+                {% for produto, form in listas %}
+                    <div class="item">
+                        <div class="card shop-item">
+                            <div class="d-flex justify-content-between">
+                                <p class="font-weight-bold text-danger text-justify">{{produto.desconto}}%</p>
+                                <div id="likedislike">
+                                    <a id="{{produto.id}}btnlike" class="btnlike">
+                                        <i class="far fa-thumbs-up"></i>
+                                        <span id="{{produto.id}}like">1</span>        
+                                    </a>
+                                    <a id="{{produto.id}}btndislike" class="btndislike">
+                                        <i class="far fa-thumbs-down"></i>
+                                        <span id="{{produto.id}}dislike">0</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <div id="midlevel">
-                            <div class="bgimage">
-                                <img src={% static 'images/' %}{{produto.imagem}} alt={{produto.slug}}>
+                            <div id="midlevel">
+                                <div class="bgimage">
+                                    <img src={% static 'images/' %}{{produto.imagem}} alt={{produto.slug}}>
+                                </div>
                             </div>
-                        </div>
-                        <div class="p-3" id="bottomlevel">
-                            <span data-toggle="tooltip" title={{produto.nome}}>
-                                <p class="mb-0 font-weight-bold overflow-hidden">{{produto.nome}}</p>
-                            </span>
-                            <p class="mb-0 original"> {{produto.valor}}</p>
-                            <p class="mb-0 discount"> {{produto.valorComDesconto}}</p>
-                        </div>
-                        <div id="buttonlevel" class="d-flex">
-                            <button class="btn btn-primary " style="width: 100%;">Comprar</button>
+                            <div class="p-3" id="bottomlevel">
+                                <span data-toggle="tooltip" title={{produto.nome}}>
+                                    <p class="mb-0 font-weight-bold overflow-hidden">{{produto.nome}}</p>
+                                </span>
+                                <p class="mb-0 original"> {{produto.valor}}</p>
+                                <p class="mb-0 discount"> {{produto.valorComDesconto}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <form class="form-inline" style="{% if form.quantidade.value == 0 %} display:none {% endif %}" method="POST" action="{% url 'carrinho:atualiza_carrinho'%}"> 
+                                    {% csrf_token %}
+                                    {{ form.produto_id }}
+                                    <div class="input-group w-100" style="{% if form.quantidade.value == 0 %} display:none {% endif %}">
+                                        <div class="input-group-prepend">
+                                            <input type="button" class="btn btn-secondary menos" value="-">
+                                        </div>
+                                        {{ form.quantidade }}
+                                        <div class="input-group-append">
+                                            <input type="button" class="btn btn-secondary mais" value="+">
+                                        </div>
+                                    </div>    
+                                </form>
+                                <input type="button" 
+                                       class="btn btn-primary comprar w-100"
+                                       style="{% if form.quantidade.value > 0 %} display:none {% endif %}"
+                                       value="Comprar">
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endfor %}    
             </tbody>
         </table>
-        
     </div>
     <div style="font-size: 14px; margin-bottom:28px">
         {% if produtos.has_other_pages %}

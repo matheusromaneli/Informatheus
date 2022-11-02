@@ -20,8 +20,8 @@ from project import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('produto/', include('produto.urls')),
     path('', include('cards.urls')),
+    path('produto/', include('produto.urls')),
     path('cadastro/', views.cadastro, name="cadastro"),
     path('carrinho/', include('carrinho.urls'))
 ]
