@@ -44,7 +44,7 @@
                             action="{% url 'carrinho:atualiza_carrinho'%}"> 
                                 {% csrf_token %}
                                 {{ form.produto_id }}
-                                <div class="input-group w-100" style="{% if form.quantidade.value == 0 %} display:none {% endif %}">
+                                <div class="input-group w-100">
                                     <div class="input-group-prepend">
                                         <input type="button" class="btn btn-secondary menos" value="-">
                                     </div>

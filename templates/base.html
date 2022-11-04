@@ -55,17 +55,15 @@
                 $('.comprar').click(function(){
                     this.blur();
                     let botao_comprar = this;
-                    let input = $(botao_comprar).prev();
-                    let prodid = $(input).prev();
-                    let csrf = $(prodid).prev();
-                    let form = $(csrf).prev();
-                    input.find("input[name='quantidade']").val(1);
+                    let form = $(botao_comprar).prev();
                     let url = form.attr('action');
                     let formData = form.serializeArray();
+
+                    form.find("input[name='quantidade']").val(1);
                     $.post(url, formData, function(response){
                         $(botao_comprar).fadeTo('fast', 0.3, function(){
                             $(botao_comprar).hide();
-                            input.show();
+                            form.show();
                         });
                     });
                 });
@@ -76,7 +74,7 @@
                     var num = +input.val() + 1
                     if ( num < 100){
                         input.val(num);
-                        let form = $(this).parent().parent().prev().prev().prev();
+                        let form = $(this).parent().parent().parent();
                         let url = form.attr('action');
                         let formData = form.serializeArray();
                         $.post(url, formData, function(response){
@@ -90,21 +88,19 @@
 
                 $(".menos").click(function() {
                     this.blur();
-                    let infos = $(this).parent().parent();
                     var input = $(this).parent().next();
-                    console.log(input);
                     var num = +input.val() - 1;
                     if(num < 0){
                         num = 0;
                     }
                     input.val(num);
-                    let form = $(this).parent().parent().prev().prev().prev();
-                    let botao_comprar = $(this).parent().parent().next();
+                    let form = $(this).parent().parent().parent();
+                    let botao_comprar = $(form).next();
                     let url = form.attr('action');
                     let formData = form.serializeArray();
                     $.post(url, formData, function(response){
                         if( num == 0 ){
-                            $(infos).hide();
+                            $(form).hide();
                             $(botao_comprar).fadeTo('fast', 1);
                         }
                     });
