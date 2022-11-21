@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from carrinho.carrinho import Carrinho
 from carrinho.forms import QuantidadeForm
+from produto.forms import ProdutoForm
 from produto.models import Produto
 
 
@@ -22,3 +23,14 @@ def index(request):
     forms_obj = paginator_forms.get_page(pagina)
 
     return render(request, 'produto/index.html', {"listas": zip(page_obj, forms_obj), "produtos": page_obj})
+
+def cadastra_produto(request):
+
+    if request.POST:
+        produto_form = ProdutoForm(request.POST)
+        if produto_form.is_valid():
+            pass
+    else:
+        produto_form = ProdutoForm()
+
+    return render(request, 'produto/cadastra_produto.html', {'form': produto_form})
