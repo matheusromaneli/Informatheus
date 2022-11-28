@@ -42,7 +42,7 @@ class Carrinho(object):
             return 0
 
     def get_preco_carrinho(self):
-        return sum(Decimal(item['preco']) for item in self.carrinho.values())
+        return sum(Decimal(item['preco_total']) for item in self.carrinho.values())
 
     def get_quantidade_carrinho(self):
         return sum(item['quantidade'] for item in self.carrinho.values())

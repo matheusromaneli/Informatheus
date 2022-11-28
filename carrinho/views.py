@@ -29,10 +29,8 @@ def atualiza_carrinho(request):
 
         carrinho = Carrinho(request)
         if quantidade == 0:
-            print("chamou remove")
             carrinho.remover(produto_id)
         else:
-            print("chamou atualiza")
             carrinho.atualiza(produto_id, quantidade)
 
         # qtd = carrinho.get_quantidade_carrinho()

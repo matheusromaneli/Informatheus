@@ -28,33 +28,30 @@
                     </tbody>
                 </table>
             </div>
+            <div class="card col-lg-3">
+                <h1>Resumo</h1>
+                <div class="d-flex justify-content-between">
+                    <p class="text-secondary font-size-6 ml-2">Valor dos produtos:</p>
+                    <p class="font-weight-bolder">R$ {{total}}</p>
+                </div>
+                <div class="bg-secondary" style="height: 1px;"></div>
+                <div class="d-flex justify-content-between">
+                    <p class="text-secondary font-size-6 ml-2">Frete:</p>
+                    <p class="font-weight-bolder">R$ {{frete}}</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="text-secondary font-size-6 ml-2">Total:</p>
+                    <p class="font-weight-bolder">R$ {{total_frete}}</p>
+                </div>
+                <button class="p-2 rounded mb-2 bg-secondary text-light">Ir para pagamento</button>
+                <div class="p-2 rounded mb-2 bg-primary text-center">
+                    <a class="text-decoration-none text-light" href="{% url 'produto:index' %}">
+                        Continuar comprando
+                    </a> 
+                </div>
+            </div>
         {% else %}
             <h1 class="large">Você ainda não possui itens no carrinho</h1>
-        {% endif %}
-        
-        {% if total != 0 %}
-        <div class="card col-lg-3">
-            <h1>Resumo</h1>
-            <div class="d-flex justify-content-between">
-                <p class="text-secondary font-size-6 ml-2">Valor dos produtos:</p>
-                <p class="font-weight-bolder">R$ {{total}}</p>
-            </div>
-            <div class="bg-secondary" style="height: 1px;"></div>
-            <div class="d-flex justify-content-between">
-                <p class="text-secondary font-size-6 ml-2">Frete:</p>
-                <p class="font-weight-bolder">R$ {{frete}}</p>
-            </div>
-            <div class="d-flex justify-content-between">
-                <p class="text-secondary font-size-6 ml-2">Total:</p>
-                <p class="font-weight-bolder">R$ {{total_frete}}</p>
-            </div>
-            <button class="p-2 rounded mb-2 bg-secondary text-light">Ir para pagamento</button>
-            <div class="p-2 rounded mb-2 bg-primary text-center">
-                <a class="text-decoration-none text-light" href="{% url 'produto:index' %}">
-                    Continuar comprando
-                </a> 
-            </div>
-        </div>
-        {% endif %}   
+        {% endif %} 
     </div>
 {% endblock body %}
