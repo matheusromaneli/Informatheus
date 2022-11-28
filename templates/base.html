@@ -56,10 +56,10 @@
                     this.blur();
                     let botao_comprar = this;
                     let form = $(botao_comprar).prev();
+                    form.find("input[name='quantidade']").val(1);
                     let url = form.attr('action');
                     let formData = form.serializeArray();
 
-                    form.find("input[name='quantidade']").val(1);
                     $.post(url, formData, function(response){
                         $(botao_comprar).fadeTo('fast', 0.3, function(){
                             $(botao_comprar).hide();

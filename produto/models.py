@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Produto(models.Model):
     nome = models.CharField(max_length=70, db_index=True, unique=True)
     slug = models.SlugField(max_length=70)
-    imagem = models.CharField(max_length=70, blank=True)
+    imagem = models.ImageField(upload_to='./static/images', blank=True)
     valor = models.DecimalField(max_digits=6,decimal_places=2)
     desconto = models.IntegerField(validators=[
         MaxValueValidator(100),

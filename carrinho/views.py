@@ -16,7 +16,7 @@ def index(request):
     return render(request, 'carrinho/index.html', {
         "has_product": len(produtos_carrinho) > 0, 
         "produtos": produtos_carrinho, 
-        "total": valor_carrinho, 
+        "total": "%.2f" % valor_carrinho, 
         "frete": "%.2f" % float(valor_carrinho * Decimal(0.02)), 
         "total_frete": "%.2f" % float(valor_carrinho * Decimal(1.02))
     })
@@ -29,14 +29,14 @@ def atualiza_carrinho(request):
 
         carrinho = Carrinho(request)
         if quantidade == 0:
+            print("chamou remove")
             carrinho.remover(produto_id)
-            preco_total = 0.0
         else:
+            print("chamou atualiza")
             carrinho.atualiza(produto_id, quantidade)
-            preco_total = carrinho.get_preco_total(produto_id)
 
-        qtd = carrinho.get_quantidade_carrinho()
-        preco_carrinho = carrinho.get_preco_carrinho()
+        # qtd = carrinho.get_quantidade_carrinho()
+        # preco_carrinho = carrinho.get_preco_carrinho()
 
         return HttpResponse('Ok')
     else:

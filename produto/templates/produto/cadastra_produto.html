@@ -7,8 +7,19 @@
 
 {% block body %}
     <h1 class="title">Produto</h1>
+    {% if messages %}
+        <div class="mb-3">
+            {% for message in messages %}
+                <ul class="list-group rounded">
+                    <li class="list-group-item list-group-item-info py-3">
+                        {{ message }}
+                    </li>
+                </ul>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="d-flex mt-3 bg-primary text-light p-2 rounded justify-content-center">
-        <form action="" method="POST" class="col-md-10" novalidate>
+        <form action="" method="POST" class="col-md-10" enctype="multipart/form-data" novalidate>
             <div class = "d-flex form-group flex-column col-md-10">
                 <label for="id_nome" class="font-weight-bold">Nome</label>
                 {{form.nome}}

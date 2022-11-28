@@ -1,10 +1,11 @@
-from django.shortcuts import get_object_or_404, redirect, render
-from django.core.paginator import Paginator
 from carrinho.carrinho import Carrinho
 from carrinho.forms import QuantidadeForm
-from produto.forms import ProdutoForm
+from django.template.defaultfilters import slugify
+from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, render
 from produto.models import Produto
-
+from produto.forms import ProdutoForm
+from django.contrib import messages
 
 def index(request):
     produtos = Produto.objects.all()
@@ -27,10 +28,20 @@ def index(request):
 def cadastra_produto(request):
 
     if request.POST:
-        produto_form = ProdutoForm(request.POST)
+        produto_form = ProdutoForm(request.POST, request.FILES)
         if produto_form.is_valid():
-            pass
+            produto = produto_form.save(commit=False)
+            produto.slug = slugify(produto.nome)
+            produto.save()
+            messages.add_message(request, messages.INFO, 'Produto cadastrado com sucesso!')
+
+           
     else:
-        produto_form = ProdutoForm()
+        produto_form = ProdutoForm(request.POST, request.FILES)
 
     return render(request, 'produto/cadastra_produto.html', {'form': produto_form})
+
+def remove_produto(request):
+    produto_id = request.session.get('produto_id_del')
+    produto = get_object_or_404(Produto, id=produto_id)
+    produto.imagem.delete()

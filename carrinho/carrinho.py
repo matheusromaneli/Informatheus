@@ -19,7 +19,7 @@ class Carrinho(object):
             self.carrinho[id] = {'id': id, 'preco': str(produto.valorComDesconto()), 'quantidade': quantidade, 'preco_total': str(produto.valorComDesconto() * quantidade)}
         else:
             self.carrinho[id]['quantidade'] = quantidade
-            self.carrinho[id]['preco_total'] = str(self.carrinho[id]['quantidade'] * Decimal(self.carrinho[id]['preco']))
+            self.carrinho[id]['preco_total'] = str(Decimal(self.carrinho[id]['preco']) * quantidade)
         
         self.salvar()
 

@@ -8,32 +8,25 @@ class ProdutoForm(forms.ModelForm):
     class Meta:
         model = Produto
         fields = ('nome', 'imagem', 'valor', 'desconto') 
+        localized_fields = ('valor',)
 
-    nome = forms.CharField(
-        error_messages={
+    def __init__(self, *args , **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['nome'].error_messages={
             'required': "Campo obrigatório",
             'unique': "Já existe"
         }
-    )    
-    #Error message keys: 
-    # required, 
-    # invalid, 
-    # max_value, 
-    # min_value, 
-    # max_digits, 
-    # max_decimal_places, 
-    # max_whole_digits, 
-    # step_size
-    valor = forms.DecimalField(
-        error_messages={
+
+        self.fields['valor'].error_messages={
             'required': "Campo obrigatório"
         }
-    )
 
-    desconto = forms.IntegerField(
-        error_messages={
+        self.fields['desconto'].error_messages={
             'required': "Campo obrigatório",
             'max_value': "Insira um valor entre 0 e 100",
             'min_value': "Insira um valor entre 0 e 100"
         }
-    )
+        self.fields['desconto'].widget=forms.TextInput(attrs={
+            'onkeypress':'return event.charCode >= 48 && event.charCode <= 57'
+        })
