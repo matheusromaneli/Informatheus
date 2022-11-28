@@ -1,0 +1,27 @@
+{% block body %}
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-left align-middle" scope="col">Nome</th>
+                <th class="text-center align-middle" scope="col">CNPJ do Fornecedor</th>
+                <th class="text-right align-middle" scope="col">Valor</th>
+                <th class="text-right align-middle" scope="col">Operação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr>
+                <td class="d-none">{{produto.id}}</td>
+                <td class="text-left align-middle">{{produto.nome}}</td>
+                <td class="text-center align-middle">{{produto.cnpj_fornecedor}}</td>
+                <td class="text-right align-middle">R$ {{produto.valorComDesconto}}</td>
+                <td class="text-right align-middle">
+                    <button class="btn btn-danger p-1 remove">Remover</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock body %}

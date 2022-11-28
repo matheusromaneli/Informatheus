@@ -41,6 +41,9 @@ class ProdutoForm(forms.ModelForm):
         self.fields['valor'].error_messages={
             'required': "Campo obrigatório"
         }
+        self.fields['valor'].widget=forms.TextInput(attrs={
+            'onkeypress':'return event.charCode >= 48 && event.charCode <= 57'
+        })
 
         self.fields['desconto'].error_messages={
             'required': "Campo obrigatório",
@@ -50,3 +53,4 @@ class ProdutoForm(forms.ModelForm):
         self.fields['desconto'].widget=forms.TextInput(attrs={
             'onkeypress':'return event.charCode >= 48 && event.charCode <= 57'
         })
+

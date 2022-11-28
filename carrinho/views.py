@@ -39,3 +39,10 @@ def atualiza_carrinho(request):
         return HttpResponse('Ok')
     else:
         raise ValueError('Erro inesperado ao adicionar um produto ao carrinho')
+
+def lista_produtos(request):
+    carrinho = Carrinho(request)
+
+    produtos_carrinho = carrinho.get_produtos()
+    print(produtos_carrinho)
+    return render(request, 'carrinho/lista_produtos.html', {"produtos": produtos_carrinho})

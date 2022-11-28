@@ -26,7 +26,7 @@
             <div class="collapse navbar-collapse" id="menu">
                 <div class="navbar-nav mr-auto">       
                     <a class="nav-link nav-item" href="{% url 'produto:index' %}">Explorar</a>
-                    <a class="nav-link nav-item" href="{% url 'produto:cadastra_produto' %}">Cadastro</a>
+                    <a class="nav-link nav-item" href="{% url 'produto:controle' %}">Cadastro</a>
                     <a class="nav-link nav-item" href="{% url 'carrinho:index' %}">
                         <img src="{% static 'images/carrinho.svg' %}" alt="carrinho" style="width: 1.7rem;">
                         <span id="car-items" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary" style="display: none">  
@@ -52,60 +52,6 @@
         $(document).ready(function(){
             
             {% block domready %}
-                $('.comprar').click(function(){
-                    this.blur();
-                    let botao_comprar = this;
-                    let form = $(botao_comprar).prev();
-                    form.find("input[name='quantidade']").val(1);
-                    let url = form.attr('action');
-                    let formData = form.serializeArray();
-
-                    $.post(url, formData, function(response){
-                        $(botao_comprar).fadeTo('fast', 0.3, function(){
-                            $(botao_comprar).hide();
-                            form.show();
-                        });
-                    });
-                });
-
-                $(".mais").click(function() {
-                    this.blur();
-                    var input = $(this).parent().prev();
-                    var num = +input.val() + 1
-                    if ( num < 100){
-                        input.val(num);
-                        let form = $(this).parent().parent().parent();
-                        let url = form.attr('action');
-                        let formData = form.serializeArray();
-                        $.post(url, formData, function(response){
-                            console.log('+ clicked');
-                        });
-                    }
-                    else{
-                        return;
-                    }
-                });
-
-                $(".menos").click(function() {
-                    this.blur();
-                    var input = $(this).parent().next();
-                    var num = +input.val() - 1;
-                    if(num < 0){
-                        num = 0;
-                    }
-                    input.val(num);
-                    let form = $(this).parent().parent().parent();
-                    let botao_comprar = $(form).next();
-                    let url = form.attr('action');
-                    let formData = form.serializeArray();
-                    $.post(url, formData, function(response){
-                        if( num == 0 ){
-                            $(form).hide();
-                            $(botao_comprar).fadeTo('fast', 1);
-                        }
-                    });
-                });
-
             {% endblock %}
         });
     </script>

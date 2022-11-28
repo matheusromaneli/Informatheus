@@ -2,7 +2,7 @@ from carrinho.carrinho import Carrinho
 from carrinho.forms import QuantidadeForm
 from django.template.defaultfilters import slugify
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from produto.models import Produto
 from produto.forms import ProdutoForm
 from django.contrib import messages
@@ -35,13 +35,21 @@ def cadastra_produto(request):
             produto.save()
             messages.add_message(request, messages.INFO, 'Produto cadastrado com sucesso!')
 
-           
+        return render(request, 'produto/cadastra_produto.html', {'form': produto_form})
+        # return redirect('produto:controle')  
     else:
-        produto_form = ProdutoForm(request.POST, request.FILES)
+        produto_form = ProdutoForm(request.FILES)
 
     return render(request, 'produto/cadastra_produto.html', {'form': produto_form})
+
+def lista_produtos(request):
+    produtos = Produto.objects.all()
+    return render(request, 'produto/lista_produtos.html', {"produtos": produtos})
 
 def remove_produto(request):
     produto_id = request.session.get('produto_id_del')
     produto = get_object_or_404(Produto, id=produto_id)
     produto.imagem.delete()
+
+def controle(request):
+    return render(request, 'produto/controle.html')
