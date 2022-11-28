@@ -10,6 +10,7 @@ class Produto(models.Model):
         MaxValueValidator(100),
         MinValueValidator(0)
     ])
+    cnpj_fornecedor = models.CharField(max_length=14)
 
     def valorComDesconto(self):
         com_desconto = (1-self.desconto/100) * self.valor.__float__()
