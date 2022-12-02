@@ -4,6 +4,14 @@ from django.forms import ValidationError
 
 from produto.models import Produto
 
+class NomeForm(forms.ModelForm):
+    class Meta:
+        model = Produto
+        fields = ('nome',) 
+
+    produto_id = forms.CharField(widget=forms.HiddenInput())
+
+    nome = forms.CharField(required=True)
 
 class ProdutoForm(forms.ModelForm):
 

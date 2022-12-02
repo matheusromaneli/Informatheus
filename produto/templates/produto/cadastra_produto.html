@@ -1,79 +1,127 @@
+{% extends 'base.html' %}
 {% load static %}
 
 {% block body %}
     <h1 class="title">Cadastro</h1>
-    {% if messages %}
-        <div class="mb-3">
-            {% for message in messages %}
-                <ul class="list-group rounded">
-                    <li class="list-group-item list-group-item-info py-3">
-                        {{ message }}
-                    </li>
-                </ul>
-            {% endfor %}
-        </div>
-    {% endif %}
-    <div class="d-flex mt-3 bg-primary text-light p-2 rounded justify-content-center">
-        <form action="" method="POST" class="col-md-10" enctype="multipart/form-data" novalidate>
-            <div class = "d-flex form-group flex-column col-md-10">
-                <label for="id_nome" class="font-weight-bold">Nome</label>
-                {{form.nome}}
-                {% if form.nome.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in form.nome.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+    <div id='form'>
+        {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                    <ul class="list-group rounded">
+                        <li class="list-group-item list-group-item-info py-3">
+                            {{ message }}
+                        </li>
+                    </ul>
+                {% endfor %}
             </div>
-            <div class = "d-flex form-group flex-column col-md-10">
-                <label for="id_cnpj_fornecedor" class="font-weight-bold">CNPJ</label>
-                {{form.cnpj_fornecedor}}
-                {% if form.cnpj_fornecedor.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in form.cnpj_fornecedor.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-            <div class = "d-flex form-group flex-column col-md-10">
-                <label for="id_imagem" class="font-weight-bold">Imagem</label>
-                {{form.imagem}}
-                {% if form.imagem.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in form.imagem.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-            <div class = "form-row">
-                <div class="d-flex flex-column col-md-6 mb-3 px-3">
-                    <label for="id_valor" class="font-weight-bold">Valor</label>
-                    {{form.valor}}
-                    {% if form.valor.errors %}
+        {% endif %}
+        <div class="d-flex mt-3 bg-primary text-light p-2 rounded justify-content-center">
+            <form action="" method="POST" class="col-md-10" enctype="multipart/form-data" novalidate>
+                <div class = "d-flex form-group flex-column col-md-10">
+                    <label for="id_nome" class="font-weight-bold">Nome</label>
+                    {{form.nome}}
+                    {% if form.nome.errors %}
                         <div class="alert alert-danger">
-                            {% for error in form.valor.errors %}
+                            {% for error in form.nome.errors %}
                                 <small>{{ error }}</small>
                             {% endfor %}
                         </div>
                     {% endif %}
                 </div>
-                <div class="d-flex flex-column col-md-4 mb-3 px-3">
-                    <label for="id_desconto" class="font-weight-bold">Desconto</label>
-                    {{form.desconto}}
-                    {% if form.desconto.errors %}
+                <div class = "d-flex form-group flex-column col-md-10">
+                    <label for="id_cnpj_fornecedor" class="font-weight-bold">CNPJ</label>
+                    {{form.cnpj_fornecedor}}
+                    {% if form.cnpj_fornecedor.errors %}
                         <div class="alert alert-danger">
-                            {% for error in form.desconto.errors %}
+                            {% for error in form.cnpj_fornecedor.errors %}
                                 <small>{{ error }}</small>
                             {% endfor %}
                         </div>
                     {% endif %}
-                </div>   
-            </div>
-            {% csrf_token %}
-            <button class="btn btn-secondary" type="submit">Cadastrar</button>                   
-        </form>
+                </div>
+                <div class = "d-flex form-group flex-column col-md-10">
+                    <label for="id_imagem" class="font-weight-bold">Imagem</label>
+                    {{form.imagem}}
+                    {% if form.imagem.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.imagem.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class = "form-row">
+                    <div class="d-flex flex-column col-md-6 mb-3 px-3">
+                        <label for="id_valor" class="font-weight-bold">Valor</label>
+                        {{form.valor}}
+                        {% if form.valor.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.valor.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex flex-column col-md-4 mb-3 px-3">
+                        <label for="id_desconto" class="font-weight-bold">Desconto</label>
+                        {{form.desconto}}
+                        {% if form.desconto.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.desconto.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>   
+                </div>
+                {% csrf_token %}
+                <button class="btn btn-secondary" type="submit">Cadastrar</button>                   
+            </form>
+        </div>
+    </div>
+    <br>
+    <div id='tabela'>
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-left align-middle" scope="col">Nome</th>
+                        <th class="text-center align-middle" scope="col">CNPJ do Fornecedor</th>
+                        <th class="text-right align-middle" scope="col">Valor</th>
+                        <th class="text-right align-middle" scope="col">Operação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto, form in listas %}
+                    <tr>
+                        <td class="d-none">{{produto.id}}</td>
+                        <td class="text-left align-middle">
+                            <form 
+                                class="mx-auto" 
+                                style="width: 60px"
+                                action="{% url 'produto:atualiza_produto'%}"
+                                method="POST"
+                                novalidate
+                            >
+                            {% csrf_token %}
+                            {{form.produto_id}}
+                            {{form.nome}}
+                            </form>
+                        </td>
+                        <td class="text-center align-middle">{{produto.cnpj_fornecedor}}</td>
+                        <td class="text-right align-middle">R$ {{produto.valorComDesconto}}</td>
+                        <td class="text-right align-middle">
+                            <form action="{% url 'produto:remove_produto' produto.id %}" method='POST'>
+                                {% csrf_token %}
+                                <button type='submit' class="btn btn-danger">
+                                    Remover
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

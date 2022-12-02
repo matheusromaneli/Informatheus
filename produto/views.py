@@ -1,10 +1,11 @@
+from django.http import JsonResponse
 from carrinho.carrinho import Carrinho
 from carrinho.forms import QuantidadeForm
 from django.template.defaultfilters import slugify
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from produto.models import Produto
-from produto.forms import ProdutoForm
+from produto.forms import NomeForm, ProdutoForm
 from django.contrib import messages
 
 def index(request):
@@ -28,28 +29,52 @@ def index(request):
 def cadastra_produto(request):
 
     if request.POST:
-        produto_form = ProdutoForm(request.POST, request.FILES)
+        produto_form = ProdutoForm(request.POST)
         if produto_form.is_valid():
             produto = produto_form.save(commit=False)
             produto.slug = slugify(produto.nome)
             produto.save()
             messages.add_message(request, messages.INFO, 'Produto cadastrado com sucesso!')
-
-        return render(request, 'produto/cadastra_produto.html', {'form': produto_form})
-        # return redirect('produto:controle')  
     else:
-        produto_form = ProdutoForm(request.FILES)
+        produto_form = ProdutoForm()
+    
+    produtos = Produto.objects.all()
+    lista_form = []
+    for produto in produtos:
+        lista_form.append(NomeForm(
+            initial={
+                'nome': produto.nome,
+                'produto_id': produto.id
+            }
+        ))
 
-    return render(request, 'produto/cadastra_produto.html', {'form': produto_form})
+    return render(request, 'produto/cadastra_produto.html', {
+        "listas": zip(produtos, lista_form), 
+        "form": produto_form})
 
 def lista_produtos(request):
     produtos = Produto.objects.all()
-    return render(request, 'produto/lista_produtos.html', {"produtos": produtos})
+    lista_form = []
+    for produto in produtos:
+        print(produto.nome)
+        lista_form.append(NomeForm(
+            initial={
+                'nome': produto.nome,
+                'produto_id': produto.id
+            }
+        ))
+    return render(request, 'produto/lista_produtos.html', {"listas": zip(produtos, lista_form)})
 
-def remove_produto(request):
-    produto_id = request.session.get('produto_id_del')
-    produto = get_object_or_404(Produto, id=produto_id)
-    produto.imagem.delete()
+def atualiza_produto(request):
+    id = request.body.produto_id
+    nome = request.body.nome
+    produto = Produto.objects.get(id)
+    print(id, nome, produto)
+    produto['nome']= nome
+    produto.save()
+    return JsonResponse({'nome': nome})
 
-def controle(request):
-    return render(request, 'produto/controle.html')
+def remove_produto(request, id):
+    produto = get_object_or_404(Produto, id=id)
+    produto.delete()
+    return redirect('produto/cadastra_produto.html')
