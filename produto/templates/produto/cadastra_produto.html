@@ -16,7 +16,7 @@
             </div>
         {% endif %}
         <div class="d-flex mt-3 bg-primary text-light p-2 rounded justify-content-center">
-            <form action="" method="POST" class="col-md-10" enctype="multipart/form-data" novalidate>
+            <form id="formData" action="" method="POST" class="col-md-10" enctype="multipart/form-data" novalidate>
                 <div class = "d-flex form-group flex-column col-md-10">
                     <label for="id_nome" class="font-weight-bold">Nome</label>
                     {{form.nome}}
@@ -87,33 +87,39 @@
                     <tr>
                         <th class="text-left align-middle" scope="col">Nome</th>
                         <th class="text-center align-middle" scope="col">CNPJ do Fornecedor</th>
-                        <th class="text-right align-middle" scope="col">Valor</th>
+                        <th class="text-left align-middle" scope="col">Valor</th>
+                        <th class="text-right align-middle" scope="col">Desconto(%)</th>
+                        <th class="text-right align-middle" scope="col">Valor Descontado</th>
                         <th class="text-right align-middle" scope="col">Operação</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="table_body">
                     {% for produto, form in listas %}
                     <tr>
                         <td class="d-none">{{produto.id}}</td>
                         <td class="text-left align-middle">
+                            {{produto.nome}}
+                        </td>
+                        <td class="text-center align-middle">{{produto.cnpj_fornecedor}}</td>
+                        <td class="text-right align-middle">R$ {{produto.valor}}</td>
+                        <td class="text-center align-middle">
                             <form 
-                                class="mx-auto" 
-                                style="width: 60px"
-                                action="{% url 'produto:atualiza_produto'%}"
-                                method="POST"
-                                novalidate
+                            class="mx-auto" 
+                            style="width: 60px"
+                            action="{% url 'produto:atualiza_produto'%}"
+                            method="POST"
+                            novalidate
                             >
                             {% csrf_token %}
                             {{form.produto_id}}
-                            {{form.nome}}
+                            {{form.desconto}}
                             </form>
                         </td>
-                        <td class="text-center align-middle">{{produto.cnpj_fornecedor}}</td>
                         <td class="text-right align-middle">R$ {{produto.valorComDesconto}}</td>
                         <td class="text-right align-middle">
                             <form action="{% url 'produto:remove_produto' produto.id %}" method='POST'>
                                 {% csrf_token %}
-                                <button type='submit' class="btn btn-danger">
+                                <button id="remove_produto" type='submit' class="btn btn-danger">
                                     Remover
                                 </button>
                             </form>
@@ -127,12 +133,37 @@
 {% endblock %}
 
 {% block domready %}
+    //envia form
+    $("#formData").submit(function(e){
+        e.preventDefault();
+        let data = $(this).serializeArray()
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'produto:cadastra_produto' %}",
+            data: data,
+            success: (response) => {
+                console.log(response)
+                let instance = JSON.parse(response["produto"]);
+                console.log(instance)
 
-    $("input.nome").addClass("form-control-sm").removeClass("btn-secondary").removeClass("border-0")
+                let fields = instance[0]["fields"];
+                console.log(fields)
 
+            },
+            error:(xhr, status, error) => {
+                console.log(xhr)
+
+            }
+        })
+    })
+
+    //muda css do label input
+    $("input.desconto").addClass("form-control-sm").removeClass("btn-secondary").removeClass("border-0")
+
+    //envia atualização bd
     $("#tabela").on("blur", "input.nome", function(){
         let valor = $(this).val()
-        if(valor == ""){
+        if(valor < 0 || valor > 100){
             $(this).focus()
             return
         }

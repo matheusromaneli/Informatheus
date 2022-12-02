@@ -4,17 +4,21 @@ from django.forms import ValidationError
 
 from produto.models import Produto
 
-class NomeForm(forms.ModelForm):
+class EditableProductForm(forms.ModelForm):
     class Meta:
         model = Produto
-        fields = ('nome',) 
+        fields = ('desconto',) 
 
     produto_id = forms.CharField(widget=forms.HiddenInput())
 
-    nome = forms.CharField(required=True)
+    def __init__(self, *args , **kwargs):
+        super().__init__(*args, **kwargs)
 
+        self.fields['desconto'].widget = forms.TextInput()
+        self.fields['desconto'].widget.attrs.update({'style': 'width: 60px'})
+
+        
 class ProdutoForm(forms.ModelForm):
-
     class Meta:
         model = Produto
         fields = ('nome', 'cnpj_fornecedor', 'imagem', 'valor', 'desconto') 

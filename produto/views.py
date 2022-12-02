@@ -5,8 +5,9 @@ from django.template.defaultfilters import slugify
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from produto.models import Produto
-from produto.forms import NomeForm, ProdutoForm
+from produto.forms import EditableProductForm, ProdutoForm
 from django.contrib import messages
+from django.core import serializers
 
 def index(request):
     produtos = Produto.objects.all()
@@ -26,25 +27,15 @@ def index(request):
 
     return render(request, 'produto/index.html', {"listas": zip(page_obj, forms_obj), "produtos": page_obj})
 
-def cadastra_produto(request):
-
-    if request.POST:
-        produto_form = ProdutoForm(request.POST)
-        if produto_form.is_valid():
-            produto = produto_form.save(commit=False)
-            produto.slug = slugify(produto.nome)
-            produto.save()
-            messages.add_message(request, messages.INFO, 'Produto cadastrado com sucesso!')
-    else:
-        produto_form = ProdutoForm()
+def cadastro(request):
     
+    produto_form = ProdutoForm()
     produtos = Produto.objects.all()
     lista_form = []
     for produto in produtos:
-        lista_form.append(NomeForm(
+        lista_form.append(EditableProductForm(
             initial={
-                'nome': produto.nome,
-                'produto_id': produto.id
+                'desconto': produto.desconto,
             }
         ))
 
@@ -52,17 +43,28 @@ def cadastra_produto(request):
         "listas": zip(produtos, lista_form), 
         "form": produto_form})
 
+def cadastra_produto(request):
+    if request.POST:
+        produto_form = ProdutoForm(request.POST)
+        if produto_form.is_valid():
+            produto = produto_form.save(commit=False)
+            produto.slug = slugify(produto.nome)
+            produto.save()
+            messages.add_message(request, messages.INFO, 'Produto cadastrado com sucesso!')
+            produto_json = serializers.serialize('json', [produto])
+            return JsonResponse({"produto": produto_json})
+        else:
+            return JsonResponse({"error": produto_form.errors}, status=400)
+
 def atualiza_produto(request):
     id = request.body.produto_id
-    nome = request.body.nome
+    desconto = request.body.desconto
     produto = Produto.objects.get(id)
-    print(id, nome, produto)
-    produto['nome']= nome
+    produto['desconto']= desconto
     produto.save()
-    return JsonResponse({'nome': nome})
+    return JsonResponse({'desconto': desconto, "valor_desconto": produto.valorComDesconto()})
 
 def remove_produto(request, id):
     produto = get_object_or_404(Produto, id=id)
     produto.delete()
-    produtos = Produto.objects.all()
-    return JsonResponse({'lista': produtos})
+    return JsonResponse({}, status=200)
