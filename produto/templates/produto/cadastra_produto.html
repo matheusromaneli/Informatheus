@@ -82,7 +82,7 @@
     <br>
     <div id='tabela'>
         <div class="card">
-            <table class="table">
+            <table id="tabela" class="table">
                 <thead>
                     <tr>
                         <th class="text-left align-middle" scope="col">Nome</th>
@@ -125,3 +125,25 @@
         </div>
     </div>
 {% endblock %}
+
+{% block domready %}
+
+    $("input.nome").addClass("form-control-sm").removeClass("btn-secondary").removeClass("border-0")
+
+    $("#tabela").on("blur", "input.nome", function(){
+        let valor = $(this).val()
+        if(valor == ""){
+            $(this).focus()
+            return
+        }
+
+        let form = $(this).parent()
+        let tr = form.parent().parent()
+        let url = form.attr("action")
+        let formData = form.serializeArray()
+        $.post(url, formData, (response) => {
+            return
+            //aqui posso usar as infos da response para atualizar elementos na pagina
+        })
+    })
+{% endblock domready %}

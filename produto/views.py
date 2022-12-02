@@ -52,19 +52,6 @@ def cadastra_produto(request):
         "listas": zip(produtos, lista_form), 
         "form": produto_form})
 
-def lista_produtos(request):
-    produtos = Produto.objects.all()
-    lista_form = []
-    for produto in produtos:
-        print(produto.nome)
-        lista_form.append(NomeForm(
-            initial={
-                'nome': produto.nome,
-                'produto_id': produto.id
-            }
-        ))
-    return render(request, 'produto/lista_produtos.html', {"listas": zip(produtos, lista_form)})
-
 def atualiza_produto(request):
     id = request.body.produto_id
     nome = request.body.nome
@@ -77,4 +64,5 @@ def atualiza_produto(request):
 def remove_produto(request, id):
     produto = get_object_or_404(Produto, id=id)
     produto.delete()
-    return redirect('produto/cadastra_produto.html')
+    produtos = Produto.objects.all()
+    return JsonResponse({'lista': produtos})
