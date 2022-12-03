@@ -27,7 +27,11 @@
                         </div>
                         <div id="midlevel">
                             <div class="bgimage">
-                                <img src={{produto.imagem.url}} alt={{produto.slug}}>
+                                {% if produto.imagem %}
+                                    <img src={{produto.imagem.url}} alt={{produto.slug}}>    
+                                {%else%}
+                                    <img src="" alt={{produto.slug}}>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="p-3" id="bottomlevel">

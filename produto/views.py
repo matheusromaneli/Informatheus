@@ -1,3 +1,4 @@
+import json
 from django.http import JsonResponse
 from carrinho.carrinho import Carrinho
 from carrinho.forms import QuantidadeForm
@@ -35,6 +36,7 @@ def cadastro(request):
     for produto in produtos:
         lista_form.append(EditableProductForm(
             initial={
+                'produto_id': produto.id,
                 'desconto': produto.desconto,
             }
         ))
@@ -50,17 +52,20 @@ def cadastra_produto(request):
             produto = produto_form.save(commit=False)
             produto.slug = slugify(produto.nome)
             produto.save()
+            print(produto.id)
             messages.add_message(request, messages.INFO, 'Produto cadastrado com sucesso!')
             produto_json = serializers.serialize('json', [produto])
-            return JsonResponse({"produto": produto_json})
+            return JsonResponse({"produto": produto_json, "id": produto.id})
         else:
             return JsonResponse({"error": produto_form.errors}, status=400)
 
 def atualiza_produto(request):
-    id = request.body.produto_id
-    desconto = request.body.desconto
-    produto = Produto.objects.get(id)
-    produto['desconto']= desconto
+    form = EditableProductForm(request.POST)
+    if(request.POST):
+        id = int(form.data['produto_id'])
+        desconto = int(form.data['desconto'])
+        produto = Produto.objects.get(id=id)
+    produto.desconto= desconto
     produto.save()
     return JsonResponse({'desconto': desconto, "valor_desconto": produto.valorComDesconto()})
 

@@ -80,7 +80,7 @@
         </div>
     </div>
     <br>
-    <div id='tabela'>
+    <div>
         <div class="card">
             <table id="tabela" class="table">
                 <thead>
@@ -115,11 +115,11 @@
                             {{form.desconto}}
                             </form>
                         </td>
-                        <td class="text-right align-middle">R$ {{produto.valorComDesconto}}</td>
+                        <td class="text-right align-middle descontado">R$ {{produto.valorComDesconto}}</td>
                         <td class="text-right align-middle">
-                            <form action="{% url 'produto:remove_produto' produto.id %}" method='POST'>
+                            <form class="delete" action="{% url 'produto:remove_produto' produto.id %}">
                                 {% csrf_token %}
-                                <button id="remove_produto" type='submit' class="btn btn-danger">
+                                <button id="remove_produto" type='button' class="btn btn-danger remover" tabindex="-1">
                                     Remover
                                 </button>
                             </form>
@@ -142,13 +142,51 @@
             url: "{% url 'produto:cadastra_produto' %}",
             data: data,
             success: (response) => {
-                console.log(response)
                 let instance = JSON.parse(response["produto"]);
-                console.log(instance)
-
+                let produto_id = JSON.parse(response["id"])
                 let fields = instance[0]["fields"];
                 console.log(fields)
-
+                produto = {
+                    id: produto_id,
+                    nome: fields["nome"],
+                    cnpj: fields["cnpj_fornecedor"],
+                    valor: fields["valor"],
+                    desconto: fields["desconto"],
+                    descontado: parseFloat(fields["valor"]) *(1-(parseFloat(fields["desconto"])/100))
+                }
+                console.log(produto)
+                $("#table_body").prepend(`
+                <tr>
+                    <td class="d-none">${produto.id}</td>
+                    <td class="text-left align-middle">
+                        ${produto.nome}
+                    </td>
+                    <td class="text-center align-middle">${produto.cnpj}</td>
+                    <td class="text-right align-middle">R$ ${produto.valor}</td>
+                    <td class="text-center align-middle">
+                        <form 
+                        class="mx-auto" 
+                        style="width: 60px"
+                        action="{% url 'produto:atualiza_produto'%}"
+                        method="POST"
+                        novalidate
+                        >
+                            {% csrf_token %}
+                            <input type="hidden" name="produto_id" value='${produto.id}' id="id_produto_id">
+                            <input type="text" name="desconto" value='${produto.desconto}' style="width: 60px" required="" id="id_desconto">
+                        </form>
+                    </td>
+                    <td class="text-right align-middle descontado">R$ ${produto.descontado}</td>
+                    <td class="text-right align-middle">
+                        <form class="delete" action="/produto/remove_produto/${produto.id}">
+                            {% csrf_token %}
+                            <button id="remove_produto" type='button' class="btn btn-danger remover" tabindex="-1">
+                                Remover
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                `)
             },
             error:(xhr, status, error) => {
                 console.log(xhr)
@@ -158,23 +196,43 @@
     })
 
     //muda css do label input
-    $("input.desconto").addClass("form-control-sm").removeClass("btn-secondary").removeClass("border-0")
+    $("input.desconto").addClass("form-control-sm")
 
     //envia atualização bd
-    $("#tabela").on("blur", "input.nome", function(){
-        let valor = $(this).val()
+    $("#tabela").on("blur", "input#id_desconto", function(){
+        let valor = +$(this).val()
         if(valor < 0 || valor > 100){
-            $(this).focus()
-            return
+            $(this).focus();
+            return;
         }
+        else{
+            let form = $(this).parent()
+            let tr = form.parent().parent()
+            let url = form.attr("action")
+            let formData = form.serializeArray()
+            $.post(url, formData, (response) => {
+                tr.find(".descontado").text(`R$ ${response.valor_desconto}`)
+                return
+                //aqui posso usar as infos da response para atualizar elementos na pagina
+            })
+        }
+    })
 
-        let form = $(this).parent()
+    $("#tabela").on("click", ".remover", () => {
+        let button = $(this.activeElement)
+        let form = button.parent()
         let tr = form.parent().parent()
+        let id = tr.find("#id_produto_id").val()
         let url = form.attr("action")
-        let formData = form.serializeArray()
-        $.post(url, formData, (response) => {
-            return
-            //aqui posso usar as infos da response para atualizar elementos na pagina
+        let data = form.serializeArray()
+        $.ajax({
+            url: url,
+            data: data,
+            success: () => {
+                tr.fadeOut('slow', () => {
+                    $(this).remove()
+                })
+            }
         })
     })
 {% endblock domready %}
