@@ -53,7 +53,6 @@ def cadastra_produto(request):
             produto.slug = slugify(produto.nome)
             produto.save()
             print(produto.id)
-            messages.add_message(request, messages.INFO, 'Produto cadastrado com sucesso!')
             produto_json = serializers.serialize('json', [produto])
             return JsonResponse({"produto": produto_json, "id": produto.id})
         else:

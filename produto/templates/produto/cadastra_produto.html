@@ -20,24 +20,12 @@
                 <div class = "d-flex form-group flex-column col-md-10">
                     <label for="id_nome" class="font-weight-bold">Nome</label>
                     {{form.nome}}
-                    {% if form.nome.errors %}
-                        <div class="alert alert-danger">
-                            {% for error in form.nome.errors %}
-                                <small>{{ error }}</small>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                    <div id="nome_error" class="errors"></div>
                 </div>
                 <div class = "d-flex form-group flex-column col-md-10">
                     <label for="id_cnpj_fornecedor" class="font-weight-bold">CNPJ</label>
                     {{form.cnpj_fornecedor}}
-                    {% if form.cnpj_fornecedor.errors %}
-                        <div class="alert alert-danger">
-                            {% for error in form.cnpj_fornecedor.errors %}
-                                <small>{{ error }}</small>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                    <div id="cnpj_fornecedor_error" class="errors"></div>
                 </div>
                 <div class = "d-flex form-group flex-column col-md-10">
                     <label for="id_imagem" class="font-weight-bold">Imagem</label>
@@ -54,24 +42,12 @@
                     <div class="d-flex flex-column col-md-6 mb-3 px-3">
                         <label for="id_valor" class="font-weight-bold">Valor</label>
                         {{form.valor}}
-                        {% if form.valor.errors %}
-                            <div class="alert alert-danger">
-                                {% for error in form.valor.errors %}
-                                    <small>{{ error }}</small>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                        <div id="valor_error" class="errors"></div>
                     </div>
                     <div class="d-flex flex-column col-md-4 mb-3 px-3">
                         <label for="id_desconto" class="font-weight-bold">Desconto</label>
                         {{form.desconto}}
-                        {% if form.desconto.errors %}
-                            <div class="alert alert-danger">
-                                {% for error in form.desconto.errors %}
-                                    <small>{{ error }}</small>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                        <div id="desconto_error" class="errors"></div>
                     </div>   
                 </div>
                 {% csrf_token %}
@@ -136,6 +112,7 @@
     //envia form
     $("#formData").submit(function(e){
         e.preventDefault();
+        let form = $(this)
         let data = $(this).serializeArray()
         $.ajax({
             type: 'POST',
@@ -143,9 +120,10 @@
             data: data,
             success: (response) => {
                 let instance = JSON.parse(response["produto"]);
-                let produto_id = JSON.parse(response["id"])
+                let produto_id = JSON.parse(response["id"]);
+                $("#formData")[0].reset()
+                $(".errors").empty();
                 let fields = instance[0]["fields"];
-                console.log(fields)
                 produto = {
                     id: produto_id,
                     nome: fields["nome"],
@@ -189,8 +167,23 @@
                 `)
             },
             error:(xhr, status, error) => {
-                console.log(xhr)
+                let errors = xhr.responseJSON.error
+                
+                let values = Object.keys(errors)
 
+                let errors_div = $(".errors")
+                errors_div.empty()
+
+                values.forEach((field) => {
+                    let messages = errors[field]
+                    let error_box = $(`#${field}_error`)
+
+                    error_box.append(`
+                    <div class="alert alert-danger">
+                        ${messages[0]}
+                    </div>
+                    `)
+                })
             }
         })
     })
